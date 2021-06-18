@@ -16,7 +16,7 @@ def target_function(lower_bound, upper_bound, dimension):
     b = B[1] - m * B[0]  
     return np.array([b, m, -1])
 
-def experiment(runs, ):
+def experiment(runs, training_points):
     #Support variables/counters initialization
     iterations_total = 0
     ratio_mismatch_total = 0
@@ -25,11 +25,11 @@ def experiment(runs, ):
     for run in range(runs):
         #"In each run choose a random line in the plane as your target function f (...)"
         f = target_function(lower_bound, upper_bound, dimension)
-        print("Target function f(x) = ", f[1], "x +", f[0])
+        #print("Target function f(x) = ", f[1], "x +", f[0])
 
         #"(...) Choose the inputs x of the data set as random points uniformly in X and evaluate the target function on each x to get the corresponding           #output y (...)"
         X = np.transpose(np.array([np.ones(training_points), random_points(lower_bound, upper_bound, training_points), random_points(lower_bound, upper_bound, training_points)]))
-        print(X)
+        #print(X)
 
         #np.sign is used to map one side of the line to -1 and the other to +1, hence giving the corresponding output y to an input x
         #np.dot is used to 
@@ -42,25 +42,20 @@ def experiment(runs, ):
 
         #Start the Perceptron Learning Algorithm (PLA)
         while True:
-            y_h = np.sign(np.dot(X, h))       # classification by hypothesis
-            comp = (y_h != y)                 # compare classification with actual data from target function
-            wrong = np.where(comp)[0]           # indices of points with wrong classification by hypothesis h
+            y_h = np.sign(np.dot(X, h))
+            comp = (y_h != y)
+            wrong = np.where(comp)[0]
 
             if wrong.size == 0:
                 break
                 
-            rnd_choice = np.random.choice(wrong)        # pick a random misclassified point
+            rnd_choice = np.random.choice(wrong)
 
-            # update weight vector (new hypothesis):
+            # update hypothesis:
             h = h +  y[rnd_choice] * np.transpose(X[rnd_choice])
             iterations_count += 1
 
         iterations_total += iterations_count
-
-        #Out-of-sample Data
-
-        # Calculate error
-        # Create data "outside" of training data
 
         N_outside = 1000
         test_x0 = np.random.uniform(-1,1,N_outside)
@@ -74,7 +69,7 @@ def experiment(runs, ):
         ratio_mismatch = ((y_target != y_hypothesis).sum()) / N_outside
         ratio_mismatch_total += ratio_mismatch
 
-        return iterations_total, ratio_mismatch_total
+    return (iterations_total, ratio_mismatch_total)
 
 #Parameters initialization
 
@@ -88,6 +83,18 @@ runs = 1000
 
 training_points = 10
 experiment1 = experiment(runs, training_points)
+print("Size of training data: N = ", training_points, "points")
+iterations_avg = experiment1[0] / runs
+print("\nAverage number of PLA iterations over", runs, "runs: t_avg = ", iterations_avg)
+ratio_mismatch_avg = experiment1[1] / runs
+print("\nAverage ratio for the mismatch between f(x) and h(x) outside of the training data:")
+print("P(f(x)!=h(x)) = ", ratio_mismatch_avg)
 
 training_points = 100
 experiment2 = experiment(runs, training_points)
+print("Size of training data: N = ", training_points, "points")
+iterations_avg = experiment2[0] / runs
+print("\nAverage number of PLA iterations over", runs, "runs: t_avg = ", iterations_avg)
+ratio_mismatch_avg = experiment2[1] / runs
+print("\nAverage ratio for the mismatch between f(x) and h(x) outside of the training data:")
+print("P(f(x)!=h(x)) = ", ratio_mismatch_avg)
