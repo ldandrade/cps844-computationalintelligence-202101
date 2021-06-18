@@ -69,7 +69,9 @@ def experiment(runs, training_points):
         ratio_mismatch = ((y_target != y_hypothesis).sum()) / N_outside
         ratio_mismatch_total += ratio_mismatch
 
-    return (iterations_total, ratio_mismatch_total)
+    iterations_avg = iterations_total / runs
+    ratio_mismatch_avg = ratio_mismatch_total / runs
+    return (iterations_avg, ratio_mismatch_avg)
 
 #Parameters initialization
 
@@ -80,21 +82,18 @@ upper_bound = 1
 
 #Experiment parameters
 runs = 1000
-
 training_points = 10
+
 experiment1 = experiment(runs, training_points)
 print("Size of training data: N = ", training_points, "points")
-iterations_avg = experiment1[0] / runs
-print("\nAverage number of PLA iterations over", runs, "runs: t_avg = ", iterations_avg)
-ratio_mismatch_avg = experiment1[1] / runs
+print("\nAverage number of PLA iterations over", runs, "runs: ", experiment1[0])
 print("\nAverage ratio for the mismatch between f(x) and h(x) outside of the training data:")
-print("P(f(x)!=h(x)) = ", ratio_mismatch_avg)
+print("P(f(x)!=h(x)) = ", experiment1[1])
 
 training_points = 100
+
 experiment2 = experiment(runs, training_points)
 print("Size of training data: N = ", training_points, "points")
-iterations_avg = experiment2[0] / runs
-print("\nAverage number of PLA iterations over", runs, "runs: t_avg = ", iterations_avg)
-ratio_mismatch_avg = experiment2[1] / runs
+print("\nAverage number of PLA iterations over", runs, "runs: t_avg = ", experiment2[0])
 print("\nAverage ratio for the mismatch between f(x) and h(x) outside of the training data:")
-print("P(f(x)!=h(x)) = ", ratio_mismatch_avg)
+print("P(f(x)!=h(x)) = ", experiment2[1])
