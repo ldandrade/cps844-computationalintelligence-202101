@@ -41,17 +41,41 @@ def linear_regression_experiment(runs, training_points, test_points):
 
     return (E_in_avg, E_out_avg) 
 
-def pla_initialized_by_linear_regression_experiment(runs, training_points, test_points):
-    #"In each run choose a random line in the plane as your target function f (...)"
-    f = target_function(lower_bound, upper_bound, dimension)
-    X, y = assemble_data_set(lower_bound, upper_bound, dimension, training_points, f)
+def pla_initialized_by_linear_regression_experiment(runs, training_points):
+    iterations_total = 0
+
+    # repeat the experiment 1000 times
+    for run in range(runs):
+        #"In each run choose a random line in the plane as your target function f (...)"
+        f = common.target_function(lower_bound, upper_bound, dimension)
+        X, y = common.assemble_data_set(lower_bound, upper_bound, dimension, training_points, f)
     
-    # LINEAR REGRESSION
-    X_dagger = np.dot(np.linalg.inv(np.dot(X.T, X)), X.T)
-    lr = np.dot(X_dagger, y)
+        # LINEAR REGRESSION
+        X_dagger = np.dot(np.linalg.inv(np.dot(X.T, X)), X.T)
+        w = np.dot(X_dagger, y)
     
-    #Classification of points according to linear regression
-    y_lr = np.sign(np.dot(X, lr))
+        #Classification of points according to linear regression
+        #y_lr = np.sign(np.dot(X, lr))
+
+        iterations_count = 0
+
+        #Start the Perceptron Learning Algorithm (PLA)
+        while True:
+            y_w = np.sign(np.dot(X, w))
+            comp = (y_w != y)
+            wrong = np.where(comp)[0]
+
+            if wrong.size == 0:
+                break
+                
+            rnd_choice = np.random.choice(wrong)
+            w = w +  y[rnd_choice] * np.transpose(X[rnd_choice])
+            iterations_count += 1
+
+        iterations_total += iterations_count
+
+    iterations_avg = iterations_total / runs
+    return iterations_avg
 
 #Target function f(x) parameters
 dimension = 2
@@ -61,8 +85,12 @@ upper_bound = 1
 #Experiment parameters
 runs = 1000
 training_points = 100 #sample size
-test_points = 1000
+testing_points = 1000
 
-experiment1 = linear_regression_experiment(runs, training_points, test_points)
+experiment1 = linear_regression_experiment(runs, training_points, testing_points)
 print("Average of E_in over", runs, " runs:", experiment1[0])
 print("Average of E_out over", runs, " runs:", experiment1[1])
+
+training_points = 10 #sample size
+iterations_avg = pla_initialized_by_linear_regression_experiment(runs, training_points)
+print("\nAverage number of PLA iterations over \(", runs, "\) runs: \(", iterations_avg, "\)")

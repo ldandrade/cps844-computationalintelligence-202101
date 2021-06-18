@@ -96,8 +96,7 @@ print("mismatch between LR and c = ", mismatch_lr_and_c)
 print("mismatch between LR and d = ", mismatch_lr_and_d)
 print("mismatch between LR and e = ", mismatch_lr_and_e)
 
-# Use that weight vector for problem 10
-# compare predictions made by w_lr_trans with those made by targer function
+
 X_test, y_test = assemble_data_set_w_noise(-1, 1, testing_points)
 E_out_avg = linear_regression_w_nonlinear_transformation_experiment_evaluation(runs, X_test, y_test, w_trans)
 print("The average error \(E_{out}\) over \(", runs, "\) runs is: \(", E_out_avg,"\)")
