@@ -23,46 +23,32 @@ def assemble_data_set(lower_bound, upper_bound, dimension, sample_size, target_f
     y = np.sign(np.dot(X, target_function))
     return (X, y)
 
-#def plot_points(X, y):
-    # plot points and color them according to their classification
-    #plt.plot(X[:,1][y == 1], X[:,2][y == 1], 'ro')
-    #plt.plot(X[:,1][y == -1], X[:,2][y == -1], 'bo')
+def abline(slope, intercept):
+    """Plot a line from slope and intercept"""
+    axes = plt.gca()
 
-    # plot line
-    # create some data points on the line (for the plot) using the parametric vector form of a line
-    # line(t) = A + t * d,  where A is a point on the line, d the directional vector and t the parameter
-    #d = B - A
-    #line_x = [A[0] + t * d[0] for t in range(-10,10)]
-    #line_y = [A[1] + t * d[1] for t in range(-10,10)]
-    #plt.plot(line_x, line_y)
+    
 
-    # plot the two points that define the line
-    #plt.plot(A[0], A[1], 'go')            
-    #plt.plot(B[0], B[1], 'go')
-
-
+def plot_points(X, y, f, h):
     # set the ranges for the x and y axis to display the [-1,1] x [-1,1] box
-    #plt.ylim(-1,1)
-    #plt.xlim(-1,1)
-    #plt.show()
+    plt.ylim(-1,1)
+    plt.xlim(-1,1)
+    axes = plt.gca()
 
-#def plot_linear_regression():
-    # LINEAR REGRESSION
-    #X_dagger = np.dot(np.linalg.inv(np.dot(X.T, X)), X.T)
-    #w_lr = np.dot(X_dagger, y_f)
+    #plot points and color them according to their classification
+    plt.plot(X[:,1][y == 1], X[:,2][y == 1], 'ro')
+    plt.plot(X[:,1][y == -1], X[:,2][y == -1], 'bo')
 
-    # plot classification according to w found by linear regression
-    # it shows that some of the points are missclassified
-    #y_lr = np.sign(np.dot(X, w_lr))
-    #print("check dimensions of y_lr: ", y_lr.shape)
+    #y = m*x + b
+    #f = [b,m,-1]
+    x_vals = np.array(axes.get_xlim())
+    y_vals = f[0] + f[1] * x_vals
 
-    # plot points and color them according to their classification
-    #plt.plot(X[:,1][y_lr == 1], X[:,2][y_lr == 1], 'ro')
-    #plt.plot(X[:,1][y_lr == -1], X[:,2][y_lr == -1], 'bo')
+    #Plot the target function
+    plt.plot(x_vals, y_vals, 'black')
 
-    # plot the correct classification line (target function)
-    #plt.plot(line_x, line_y, 'g')
-    #plt.ylim(-1,1)
-    #plt.xlim(-1,1)
+    #Plot the hypothesis function
+    yh_vals = h[0] + h[1] * x_vals
+    plt.plot(x_vals, yh_vals, 'g')
 
-    #plt.show()
+    plt.show()

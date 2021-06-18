@@ -34,6 +34,7 @@ def experiment(runs, training_points):
 
         iterations_total += iterations_count
 
+        #Points to calculate E_out
         N_outside = 1000
         test_x0 = np.random.uniform(-1,1,N_outside)
         test_x1 = np.random.uniform(-1,1,N_outside)
@@ -42,6 +43,8 @@ def experiment(runs, training_points):
 
         y_target = np.sign(X.dot(f))
         y_hypothesis = np.sign(X.dot(h))
+
+        common.plot_points(X,y_target,f,h)
 
         ratio_mismatch = ((y_target != y_hypothesis).sum()) / N_outside
         ratio_mismatch_total += ratio_mismatch
