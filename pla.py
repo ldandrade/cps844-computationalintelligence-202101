@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import common
 
+#Questions 1, 2, 3 and 4
 def experiment(runs, training_points):
     #Support variables/counters initialization
     iterations_total = 0
@@ -28,8 +29,6 @@ def experiment(runs, training_points):
                 break
                 
             rnd_choice = np.random.choice(wrong)
-
-            # update hypothesis:
             h = h +  y[rnd_choice] * np.transpose(X[rnd_choice])
             iterations_count += 1
 
@@ -51,7 +50,11 @@ def experiment(runs, training_points):
     ratio_mismatch_avg = ratio_mismatch_total / runs
     return (iterations_avg, ratio_mismatch_avg)
 
-#Parameters initialization
+#Question 5
+def plot_experiment():
+    print("TODO")
+
+#Parameters initialization ------------------------------------
 
 #Target function f(x) parameters
 dimension = 2
@@ -62,16 +65,20 @@ upper_bound = 1
 runs = 1000
 training_points = 10
 
-experiment1 = experiment(runs, training_points)
-print("Size of training data: N = ", training_points, "points")
-print("\nAverage number of PLA iterations over", runs, "runs: ", experiment1[0])
-print("\nAverage ratio for the mismatch between f(x) and h(x) outside of the training data:")
-print("P(f(x)!=h(x)) = ", experiment1[1])
+#Experiments execution ----------------------------------------
 
+questions1and2 = experiment(runs, training_points)
+print("Size of training data: \(N = ", training_points, "\) points")
+print("\nAverage number of PLA iterations over \(", runs, "\) runs: \(", questions1and2[0], "\)")
+print("\nAverage ratio for the mismatch between \(f(x)\) and \(h(x)\) outside of the training data:")
+print("\(P(f(x) \\neq h(x)) = ", questions1and2[1],"\)")
+
+#Increase size of data set from 10 to 100 points
 training_points = 100
 
-experiment2 = experiment(runs, training_points)
-print("Size of training data: N = ", training_points, "points")
-print("\nAverage number of PLA iterations over", runs, "runs: t_avg = ", experiment2[0])
-print("\nAverage ratio for the mismatch between f(x) and h(x) outside of the training data:")
-print("P(f(x)!=h(x)) = ", experiment2[1])
+#and rerun the previous experiment
+questions3and4 = experiment(runs, training_points)
+print("Size of training data: \(N = ", training_points, "\) points")
+print("\nAverage number of PLA iterations over \(", runs, "\) runs: \(", questions3and4[0],"\)")
+print("\nAverage ratio for the mismatch between \(f(x)\) and \(h(x)\) outside of the training data:")
+print("\(P(f(x) \\neq h(x)) = ", questions3and4[1], "\)")
