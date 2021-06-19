@@ -2,19 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import common
 
-def assemble_data_set_w_noise(lower_bound, upper_bound, training_points):
-    #"(...) Consider the target function \(f(x_1,x_2)=sign(x^2_1+x^2_2-0.6)\) (...) Generate a training set of N = 1000 points on \(X=[-1,1] \times [-1,1]\) with a uniform probability (...)"
-    X = np.transpose(np.array([np.ones(training_points), common.random_points(lower_bound, upper_bound, training_points), common.random_points(lower_bound, upper_bound, training_points)]))
-    y = np.sign(np.multiply(X[:,1], X[:,1]) + np.multiply(X[:,2], X[:,2]) - 0.6)
-
-    #"(...) Generate simulated noise by flipping the sign of the output in a randomly selected \(10\%\) subset of the generated training set. (...)"
-    indices = list(range(training_points))
-    np.random.shuffle(indices)
-    random_indices = indices[:(training_points // 10)]
-    for i in random_indices:
-        y[i] = (-1) * y[i]
-    return (X,y)
-
 #Question 10
 def linear_regression_w_noise_experiment(runs, X, y):
     E_in_total = 0
@@ -83,7 +70,7 @@ runs = 1000
 training_points = 1000
 testing_points = 1000
 
-X, y = assemble_data_set_w_noise(-1, 1, training_points)
+X, y, unused = common.assemble_data_set_w_noise(-1, 1, training_points, False)
 
 E_in_avg = linear_regression_w_noise_experiment(runs, X, y)
 print("The average error \(E_{in}\) over \(", runs, "\) runs is: \(", E_in_avg,"\)")
@@ -97,6 +84,6 @@ print("mismatch between LR and d = ", mismatch_lr_and_d)
 print("mismatch between LR and e = ", mismatch_lr_and_e)
 
 
-X_test, y_test = assemble_data_set_w_noise(-1, 1, testing_points)
+X_test, y_test, unused = common.assemble_data_set_w_noise(-1, 1, testing_points, False)
 E_out_avg = linear_regression_w_nonlinear_transformation_experiment_evaluation(runs, X_test, y_test, w_trans)
 print("The average error \(E_{out}\) over \(", runs, "\) runs is: \(", E_out_avg,"\)")

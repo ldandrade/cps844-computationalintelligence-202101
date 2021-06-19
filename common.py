@@ -21,13 +21,25 @@ def assemble_data_set(lower_bound, upper_bound, dimension, sample_size, target_f
     X = np.transpose(np.array([np.ones(sample_size), random_points(lower_bound, upper_bound, sample_size), random_points(lower_bound, upper_bound, sample_size)]))           # input
     #np.sign is used to map one side of the line to -1 and the other to +1, hence giving the corresponding output y to an input x
     y = np.sign(np.dot(X, target_function))
-    return (X, y)
+    return (X, y) 
 
-def abline(slope, intercept):
-    """Plot a line from slope and intercept"""
-    axes = plt.gca()
+def assemble_data_set_w_noise(lower_bound, upper_bound, training_points, generate_target_function):
+    #"(...) Consider the target function \(f(x_1,x_2)=sign(x^2_1+x^2_2-0.6)\) (...) Generate a training set of N = 1000 points on \(X=[-1,1] \times [-1,1]\) with a uniform probability (...)"
+    X = np.transpose(np.array([np.ones(training_points), random_points(lower_bound, upper_bound, training_points), random_points(lower_bound, upper_bound, training_points)]))
+    if generate_target_function:
+        f = target_function(-1,1,2)
+        y = np.sign(np.dot(X, f))
+    else:
+        f = []
+        y = np.sign(np.multiply(X[:,1], X[:,1]) + np.multiply(X[:,2], X[:,2]) - 0.6)
 
-    
+    #"(...) Generate simulated noise by flipping the sign of the output in a randomly selected \(10\%\) subset of the generated training set. (...)"
+    indices = list(range(training_points))
+    np.random.shuffle(indices)
+    random_indices = indices[:(training_points // 10)]
+    for i in random_indices:
+        y[i] = (-1) * y[i]
+    return (X,y,f)
 
 def plot_points(X, y, f, h):
     # set the ranges for the x and y axis to display the [-1,1] x [-1,1] box
