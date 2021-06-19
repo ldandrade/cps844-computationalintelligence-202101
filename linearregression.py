@@ -108,7 +108,8 @@ def pla_pocket_performance_evaluation_experiment(lr_init, runs, iterations, trai
 
         # Out-of-sample error: E_out
         E_out = sum(y_w != y_test) / testing_points
-        E_out_total += E_out    
+        E_out_total += E_out
+    common.plot_points(X, y, f, w)
     E_out_avg = E_out_total / runs
     
     return  E_out_avg
